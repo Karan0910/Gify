@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.cardview.widget.CardView
+
+        android:id="@+id/vehicle_card_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="8dp"
+        app:cardCornerRadius="8dp">
+
+
+           <ImageView
+               android:id="@+id/image_view_gif"
+               android:layout_width="100dp"
+               android:layout_height="100dp"/>
+
+    </androidx.cardview.widget.CardView>
+
+
+</layout>
