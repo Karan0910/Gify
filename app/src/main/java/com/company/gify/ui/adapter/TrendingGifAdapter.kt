@@ -27,7 +27,7 @@ class TrendingGifAdapter(private val gifList: ArrayList<Gif>) : RecyclerView.Ada
 
         Glide.with(holder.itemGifBinding.imageViewGif.context)
             .asGif()
-            .load(gifList.get(position).images.preview.mp4)
+            .load(gifList.get(position).images.preview_gif.url)
             .into(holder.itemGifBinding.imageViewGif)
     }
 
