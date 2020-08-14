@@ -9,7 +9,6 @@ import com.company.gify.R
 import com.company.gify.databinding.ItemGifBinding
 import com.company.gify.model.Gif
 
-
 class TrendingGifAdapter(private val gifList: ArrayList<Gif>) : RecyclerView.Adapter<TrendingGifAdapter.GifViewHolder>() {
 
 
@@ -25,10 +24,16 @@ class TrendingGifAdapter(private val gifList: ArrayList<Gif>) : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: TrendingGifAdapter.GifViewHolder, position: Int) {
 
+        val gif=
+            gifList.get(position)
+        holder.itemGifBinding.gif=gif
+
         Glide.with(holder.itemGifBinding.imageViewGif.context)
             .asGif()
             .load(gifList.get(position).images.preview_gif.url)
             .into(holder.itemGifBinding.imageViewGif)
+
+
     }
 
     inner class GifViewHolder(val itemGifBinding: ItemGifBinding) :

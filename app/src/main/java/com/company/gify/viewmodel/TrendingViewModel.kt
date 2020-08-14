@@ -96,4 +96,8 @@ class TrendingViewModel : ViewModel() {
         }
     }
 
+    fun addGif(){
+
+        Log.d("TAG", "addGif: ")
+    }
 }

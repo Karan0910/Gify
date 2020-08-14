@@ -37,12 +37,12 @@ class ApiModule {
 
 
     @Provides
-    fun provideVehicleList(): ArrayList<Gif> {
+    fun provideGifList(): ArrayList<Gif> {
         return ArrayList()
     }
 
     @Provides
-    fun provideVehicleAdapter(vehicles: ArrayList<Gif>): TrendingGifAdapter {
+    fun provideGifAdapter(vehicles: ArrayList<Gif>): TrendingGifAdapter {
         return TrendingGifAdapter(vehicles)
     }
 }

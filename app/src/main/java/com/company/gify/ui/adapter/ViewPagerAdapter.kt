@@ -17,8 +17,8 @@ class ViewPagerAdapter(private val context: Context, fragmentManager: FragmentMa
     )
     override fun getItem(position: Int): Fragment {
         when (position) {
-            1 -> return TrendingFragment()
-            2 -> return FavouriteFragment()
+            0 -> return TrendingFragment()
+            1 -> return FavouriteFragment()
             else -> {
                 return TrendingFragment()
             }
