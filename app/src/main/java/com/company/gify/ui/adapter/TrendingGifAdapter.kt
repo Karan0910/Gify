@@ -8,9 +8,13 @@ import com.bumptech.glide.Glide
 import com.company.gify.R
 import com.company.gify.databinding.ItemGifBinding
 import com.company.gify.model.Gif
+import com.company.gify.viewmodel.TrendingViewModel
 
-class TrendingGifAdapter(private val gifList: ArrayList<Gif>) : RecyclerView.Adapter<TrendingGifAdapter.GifViewHolder>() {
+class TrendingGifAdapter : RecyclerView.Adapter<TrendingGifAdapter.GifViewHolder>() {
 
+    private val gifList = ArrayList<Gif>()
+
+    lateinit var viewModel: TrendingViewModel
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifViewHolder {
         val itemGifBinding: ItemGifBinding = DataBindingUtil.inflate(
@@ -19,6 +23,8 @@ class TrendingGifAdapter(private val gifList: ArrayList<Gif>) : RecyclerView.Ada
             parent,
             false
         )
+
+        itemGifBinding.viewModel = viewModel
         return GifViewHolder(itemGifBinding)
     }
 
@@ -45,6 +51,6 @@ class TrendingGifAdapter(private val gifList: ArrayList<Gif>) : RecyclerView.Ada
         gifList.addAll(listOfGifs)
         notifyDataSetChanged()
     }
-    override fun getItemCount(): Int = gifList.size
 
+    override fun getItemCount(): Int = gifList.size
 }

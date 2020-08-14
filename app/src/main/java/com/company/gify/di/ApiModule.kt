@@ -35,14 +35,8 @@ class ApiModule {
         return CompositeDisposable()
     }
 
-
     @Provides
-    fun provideGifList(): ArrayList<Gif> {
-        return ArrayList()
-    }
-
-    @Provides
-    fun provideGifAdapter(vehicles: ArrayList<Gif>): TrendingGifAdapter {
-        return TrendingGifAdapter(vehicles)
+    fun provideGifAdapter(): TrendingGifAdapter {
+        return TrendingGifAdapter()
     }
 }

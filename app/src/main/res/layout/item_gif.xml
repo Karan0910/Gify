@@ -23,6 +23,7 @@
         android:layout_margin="8dp"
         android:focusable="true"
         android:clickable="true"
+        android:onClick="@{() -> viewModel.addGif(gif)}"
         android:elevation="8dp"
         app:cardCornerRadius="8dp">
 

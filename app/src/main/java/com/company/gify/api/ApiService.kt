@@ -14,11 +14,9 @@ class ApiService {
         val BASE_URL = "https://api.giphy.com/v1/gifs/"
     }
 
-
     init {
         DaggerApiComponent.create().inject(this)
     }
-
 
     fun fetchTrendingGifs(api_key: String): Single<GifsResult> {
         return gifyapi.getTrendingGif(api_key)

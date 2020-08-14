@@ -42,6 +42,7 @@ class TrendingFragment : Fragment() {
     ): View? {
 
         trendingViewModel = ViewModelProvider(this).get(TrendingViewModel::class.java)
+
         val binding = FragmentTrendingBinding.inflate(
             inflater, container, false
         )
@@ -58,6 +59,7 @@ class TrendingFragment : Fragment() {
 
         binding.recyclerViewTrending.apply {
             layoutManager = GridLayoutManager(context, 2)
+            gifAdapter.viewModel = trendingViewModel
             adapter = gifAdapter
         }
 

@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.company.gify.databinding.FragmentTrendingBinding
+import com.company.gify.db.GifDatabase
+import com.company.gify.db.entities.GifData
 import com.company.gify.ui.adapter.TrendingGifAdapter
 import com.company.gify.viewmodel.FavouriteViewModel
+import com.company.gify.viewmodel.TrendingViewModel
 import kotlinx.android.synthetic.main.fragment_trending.*
 import javax.inject.Inject
 
@@ -17,10 +20,10 @@ import javax.inject.Inject
 class FavouriteFragment : Fragment() {
 
 
-
-
     @Inject
     lateinit var gifAdapter: TrendingGifAdapter
+
+    private lateinit var favouriteViewModel: FavouriteViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +38,10 @@ class FavouriteFragment : Fragment() {
         val binding = FragmentTrendingBinding.inflate(
             inflater, container, false
         )
+        favouriteViewModel = ViewModelProvider(this).get(FavouriteViewModel::class.java)
 
+        var dataBaseInstance = GifDatabase.getDatabasenIstance(requireContext())
+        favouriteViewModel?.setInstanceOfDb(dataBaseInstance)
 
         val view: View = binding.getRoot()
         return view

@@ -27,7 +27,6 @@ class TrendingViewModel : ViewModel() {
 
     init {
         DaggerApiComponent.create().inject(this)
-
     }
 
     private val gifList by lazy { MutableLiveData<List<Gif>>() }
@@ -49,7 +48,6 @@ class TrendingViewModel : ViewModel() {
     fun onRefresh(){
         fetchGifs()
     }
-
 
     private fun fetchGifs() {
         compositeDisposable.add(
@@ -76,7 +74,6 @@ class TrendingViewModel : ViewModel() {
         compositeDisposable.clear()
     }
 
-
     private fun createGifObserver(): DisposableSingleObserver<List<Gif>> {
         return object : DisposableSingleObserver<List<Gif>>() {
 
@@ -96,7 +93,7 @@ class TrendingViewModel : ViewModel() {
         }
     }
 
-    fun addGif(){
+    fun addGif(gif: Gif){
 
         Log.d("TAG", "addGif: ")
     }
