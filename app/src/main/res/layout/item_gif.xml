@@ -2,6 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="gif"
+            type="com.company.gify.model.Gif">
+
+        </variable>
+        
+        <variable
+            name="viewModel"
+            type="com.company.gify.viewmodel.TrendingViewModel" />
+    </data>
+
     <androidx.cardview.widget.CardView
 
         android:id="@+id/vehicle_card_view"
@@ -9,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:elevation="8dp"
+        android:onClick=""
         app:cardCornerRadius="8dp">
 
 

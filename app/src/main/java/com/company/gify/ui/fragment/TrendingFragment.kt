@@ -1,9 +1,9 @@
 package com.company.gify.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.company.gify.R
 import com.company.gify.databinding.FragmentTrendingBinding
 import com.company.gify.di.DaggerApiComponent
+import com.company.gify.ui.activity.MainActivity
 import com.company.gify.ui.adapter.TrendingGifAdapter
 import com.company.gify.viewmodel.TrendingViewModel
 import kotlinx.android.synthetic.main.fragment_trending.*
@@ -27,6 +28,7 @@ class TrendingFragment : Fragment() {
 
     private lateinit var trendingViewModel: TrendingViewModel
 
+    private lateinit var searchView: SearchView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +41,8 @@ class TrendingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        trendingViewModel =  ViewModelProvider(this).get(TrendingViewModel::class.java)
-        val binding  = FragmentTrendingBinding.inflate(
+        trendingViewModel = ViewModelProvider(this).get(TrendingViewModel::class.java)
+        val binding = FragmentTrendingBinding.inflate(
             inflater, container, false
         )
         val view: View = binding.getRoot()
@@ -55,11 +57,13 @@ class TrendingFragment : Fragment() {
         }
 
         binding.recyclerViewTrending.apply {
-            layoutManager = GridLayoutManager(context,2)
+            layoutManager = GridLayoutManager(context, 2)
             adapter = gifAdapter
         }
 
         observeLiveData()
+
+        setHasOptionsMenu(true)
 
         return view
     }
@@ -72,8 +76,7 @@ class TrendingFragment : Fragment() {
     }
 
 
-    private fun observeGifList()
-    {
+    private fun observeGifList() {
         trendingViewModel.gifListLD.observe(viewLifecycleOwner, Observer { gifList ->
             gifList.let {
                 recycler_view_trending.visibility = View.VISIBLE
@@ -100,6 +103,29 @@ class TrendingFragment : Fragment() {
     private fun observeIsError() {
         trendingViewModel.isErrorLD.observe(viewLifecycleOwner, Observer { isError ->
             isError.let { fetch_error.visibility = if (it) View.VISIBLE else View.GONE }
+        })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        searchView = menu.findItem(R.id.searchView)?.actionView as SearchView
+        searchView.queryHint = "Search all the GIFs"
+        configureSearch(searchView)
+    }
+
+
+    private fun configureSearch(searchView: SearchView) {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                trendingViewModel.fetchSearchedGifs(query);
+                return false
+            }
+
         })
     }
 

@@ -23,4 +23,8 @@ class ApiService {
     fun fetchTrendingGifs(api_key: String): Single<GifsResult> {
         return gifyapi.getTrendingGif(api_key)
     }
+
+    fun fetchSearchedGifs(api_key: String, query: String): Single<GifsResult> {
+        return gifyapi.getSearchedGif(api_key,query)
+    }
 }

@@ -60,6 +60,17 @@ class TrendingViewModel : ViewModel() {
                 .subscribeWith(createGifObserver())
         )
     }
+
+    fun fetchSearchedGifs(query : String) {
+        compositeDisposable.add(
+            apiService.fetchSearchedGifs("g6OYYyLwvtQiDL78sg877bwLmGVQd6L9",query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { it.data }
+                .subscribeWith(createGifObserver())
+        )
+    }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
