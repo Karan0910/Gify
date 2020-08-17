@@ -50,17 +50,17 @@
                 android:focusable="true" />
 
 
-            <ImageButton
-                android:id="@+id/fav_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                 <com.jackandphantom.androidlikebutton.AndroidLikeButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                     android:id="@+id/fav_img"
                 android:layout_gravity="end"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:background="@null"
-                android:onClick="@{() -> trendingViewModel.addRemoveGif(gif)}"
-                android:src="@drawable/ic_fav_empty" />
+                app:like_icon="@drawable/ic_fav_filled"
+                app:unlike_icon="@drawable/ic_fav_empty"
 
+                />
         </LinearLayout>
 
 

@@ -39,11 +39,7 @@ class TrendingGifAdapter : RecyclerView.Adapter<TrendingGifAdapter.GifViewHolder
             .load(gifList.get(position).images.preview_gif.url)
             .into(holder.itemGifBinding.imageViewGif)
 
-        if(gif.favorite)
-        holder.itemGifBinding.favImage.setBackgroundResource(R.drawable.ic_fav_filled)
-        else {
-            holder.itemGifBinding.favImage.setBackgroundResource(R.drawable.ic_fav_empty)
-        }
+        holder.itemGifBinding.favImg.setCurrentlyLiked(gif.favorite)
 
     }
 

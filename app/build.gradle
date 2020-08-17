@@ -86,7 +86,9 @@ dependencies {
     implementation "androidx.room:room-rxjava2:2.2.5"
     kapt "androidx.room:room-compiler:2.2.5"
 
+    implementation "com.github.varunest:sparkbutton:1.0.6"
 
-    //Pagination
-    implementation 'android.arch.paging:runtime:2.1.0'
+    implementation 'com.jackandphantom.android:androidlikebutton:1.2.0'
+
+
 }

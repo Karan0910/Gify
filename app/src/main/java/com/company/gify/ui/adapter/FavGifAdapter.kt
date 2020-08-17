@@ -42,7 +42,7 @@ class FavGifAdapter : RecyclerView.Adapter<FavGifAdapter.GifViewHolder>() {
             .into(holder.itemGifBinding.imageViewGif)
 
 
-        holder.itemGifBinding.favImage.setBackgroundResource(R.drawable.ic_fav_filled)
+        holder.itemGifBinding.favImg.setBackgroundResource(R.drawable.ic_fav_filled)
 
 
     }
