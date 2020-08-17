@@ -31,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         binding.viewPager.adapter=viewPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
 
+        binding.tabs.getTabAt(0)?.setIcon(R.drawable.ic_trending)
+        binding.tabs.getTabAt(1)?.setIcon(R.drawable.ic_fav_filled)
+
 
     }
 
@@ -53,10 +56,16 @@ class MainActivity : AppCompatActivity() {
            }
            override fun onPageSelected(position: Int) {
                Log.d("TAG", "onPageSelected: "+position)
-               if(position==0)
-                   searchView.visibility= View.VISIBLE
-               else if(position==1)
+               if(position==0) {
+                   searchView.visibility = View.VISIBLE
+                   supportActionBar?.show()
+               }
+
+               else if(position==1) {
+                   actionBar?.hide()
+                   supportActionBar?.hide()
                    searchView.visibility= View.GONE
+               }
            }
 
        })

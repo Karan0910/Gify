@@ -38,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/colorPrimaryDark"
             >
 
 
@@ -59,7 +60,7 @@
                 android:layout_marginBottom="8dp"
                 app:like_icon="@drawable/ic_fav_filled"
                 app:unlike_icon="@drawable/ic_fav_empty"
-
+                android:visibility="gone"
                 />
         </LinearLayout>
 
