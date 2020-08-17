@@ -7,14 +7,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.company.gify.R
 import com.company.gify.databinding.ItemGifBinding
+import com.company.gify.db.entities.GifData
 import com.company.gify.model.Gif
+import com.company.gify.viewmodel.FavouriteViewModel
 import com.company.gify.viewmodel.TrendingViewModel
 
-class TrendingGifAdapter : RecyclerView.Adapter<TrendingGifAdapter.GifViewHolder>() {
+class FavGifAdapter : RecyclerView.Adapter<FavGifAdapter.GifViewHolder>() {
 
-    private val gifList = ArrayList<Gif>()
+    private val gifList = ArrayList<GifData>()
 
-    lateinit var viewModel: TrendingViewModel
+    lateinit var viewModel: FavouriteViewModel
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifViewHolder {
         val itemGifBinding: ItemGifBinding = DataBindingUtil.inflate(
@@ -24,26 +26,24 @@ class TrendingGifAdapter : RecyclerView.Adapter<TrendingGifAdapter.GifViewHolder
             false
         )
 
-        itemGifBinding.trendingViewModel = viewModel
+        itemGifBinding.favViewModel = viewModel
         return GifViewHolder(itemGifBinding)
     }
 
-    override fun onBindViewHolder(holder: TrendingGifAdapter.GifViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavGifAdapter.GifViewHolder, position: Int) {
 
         val gif=
             gifList.get(position)
-        holder.itemGifBinding.gif=gif
+        holder.itemGifBinding.gifData=gif
 
         Glide.with(holder.itemGifBinding.imageViewGif.context)
             .asGif()
-            .load(gifList.get(position).images.preview_gif.url)
+            .load(gifList.get(position).imageURL)
             .into(holder.itemGifBinding.imageViewGif)
 
-        if(gif.favorite)
+
         holder.itemGifBinding.favImage.setBackgroundResource(R.drawable.ic_fav_filled)
-        else {
-            holder.itemGifBinding.favImage.setBackgroundResource(R.drawable.ic_fav_empty)
-        }
+
 
     }
 
@@ -51,7 +51,7 @@ class TrendingGifAdapter : RecyclerView.Adapter<TrendingGifAdapter.GifViewHolder
         RecyclerView.ViewHolder(itemGifBinding.root)
 
 
-    fun setUpGifs(listOfGifs: List<Gif>) {
+    fun setUpGifs(listOfGifs: List<GifData>) {
         gifList.clear()
         gifList.addAll(listOfGifs)
         notifyDataSetChanged()

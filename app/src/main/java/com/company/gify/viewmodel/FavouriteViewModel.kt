@@ -1,6 +1,7 @@
 package com.company.gify.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import com.company.gify.db.GifDatabase
@@ -17,24 +18,19 @@ class FavouriteViewModel :ViewModel() {
 
     private var dataBaseInstance: GifDatabase ?= null
 
-    var gifList = MutableLiveData<List<GifData>>()
+
+    private val gifList by lazy { MutableLiveData<List<GifData>>() }
+
+    val gifListLD: LiveData<List<GifData>>
+        get() = gifList
+
+    //assuming this list will contain data
+    lateinit var favoriteList: List<Gif>
 
     fun setInstanceOfDb(dataBaseInstance: GifDatabase) {
         this.dataBaseInstance = dataBaseInstance
     }
 
-    fun saveDataIntoDb(data: GifData){
-
-        dataBaseInstance?.gifDataDao()?.insertGifData(data)
-            ?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe ({
-            },{
-
-            })?.let {
-                compositeDisposable.add(it)
-            }
-    }
 
     fun getGifData(){
 
@@ -43,6 +39,7 @@ class FavouriteViewModel :ViewModel() {
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe ({
                 if(!it.isNullOrEmpty()){
+
                     gifList.postValue(it)
                 }else{
                     gifList.postValue(listOf())
@@ -62,8 +59,8 @@ class FavouriteViewModel :ViewModel() {
         super.onCleared()
     }
 
-    fun removeGif(person: GifData) {
-        dataBaseInstance?.gifDataDao()?.removeGifData(person)
+    fun removeGif(gif: GifData) {
+        dataBaseInstance?.gifDataDao()?.removeGifData(gif)
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe ({
@@ -75,5 +72,6 @@ class FavouriteViewModel :ViewModel() {
                 compositeDisposable.add(it)
             }
     }
+
 
 }
