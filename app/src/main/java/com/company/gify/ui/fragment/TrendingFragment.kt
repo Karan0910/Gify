@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.company.gify.R
 import com.company.gify.databinding.FragmentTrendingBinding
 import com.company.gify.di.DaggerApiComponent
