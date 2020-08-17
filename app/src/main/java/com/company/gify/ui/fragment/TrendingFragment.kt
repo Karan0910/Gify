@@ -1,10 +1,8 @@
 package com.company.gify.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,11 +10,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.company.gify.R
 import com.company.gify.databinding.FragmentTrendingBinding
 import com.company.gify.di.DaggerApiComponent
-import com.company.gify.ui.activity.MainActivity
 import com.company.gify.ui.adapter.TrendingGifAdapter
 import com.company.gify.viewmodel.TrendingViewModel
 import kotlinx.android.synthetic.main.fragment_trending.*
-import kotlinx.android.synthetic.main.fragment_trending.view.*
 import javax.inject.Inject
 
 
