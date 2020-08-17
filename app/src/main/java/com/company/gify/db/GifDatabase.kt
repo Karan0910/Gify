@@ -17,7 +17,7 @@ abstract class GifDatabase : RoomDatabase() {
         @Volatile
         private var databseInstance: GifDatabase? = null
 
-        fun getDatabasenIstance(mContext: Context): GifDatabase =
+        fun getDatabasenInstance(mContext: Context): GifDatabase =
             databseInstance ?: synchronized(this) {
                 databseInstance ?: buildDatabaseInstance(mContext).also {
                     databseInstance = it
@@ -35,4 +35,4 @@ abstract class GifDatabase : RoomDatabase() {
 
 const val DB_VERSION = 1
 
-const val DB_NAME = "PersonDataSample.db"
+const val DB_NAME = "GidDataDatabase.db"

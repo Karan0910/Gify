@@ -86,4 +86,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:2.2.5"
     kapt "androidx.room:room-compiler:2.2.5"
 
+
+    //Pagination
+    implementation 'android.arch.paging:runtime:2.1.0'
 }

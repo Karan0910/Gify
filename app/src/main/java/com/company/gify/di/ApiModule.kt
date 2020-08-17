@@ -2,7 +2,9 @@ package com.company.gify.di
 
 import com.company.gify.api.ApiService
 import com.company.gify.api.GifyApi
+import com.company.gify.db.GifDatabase
 import com.company.gify.model.Gif
+import com.company.gify.ui.adapter.FavGifAdapter
 import com.company.gify.ui.adapter.TrendingGifAdapter
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -35,14 +37,15 @@ class ApiModule {
         return CompositeDisposable()
     }
 
-
     @Provides
-    fun provideGifList(): ArrayList<Gif> {
-        return ArrayList()
+    fun provideGifAdapter(): TrendingGifAdapter {
+        return TrendingGifAdapter()
     }
 
     @Provides
-    fun provideGifAdapter(vehicles: ArrayList<Gif>): TrendingGifAdapter {
-        return TrendingGifAdapter(vehicles)
+    fun provideFavGifAdapter(): FavGifAdapter {
+        return FavGifAdapter()
     }
+
+
 }

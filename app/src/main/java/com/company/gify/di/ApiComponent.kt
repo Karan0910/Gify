@@ -2,7 +2,9 @@ package com.company.gify.di
 
 import androidx.fragment.app.Fragment
 import com.company.gify.api.ApiService
+import com.company.gify.ui.fragment.FavouriteFragment
 import com.company.gify.ui.fragment.TrendingFragment
+import com.company.gify.viewmodel.FavouriteViewModel
 import com.company.gify.viewmodel.TrendingViewModel
 import dagger.Component
 
@@ -15,4 +17,6 @@ interface ApiComponent {
     fun inject(trendingViewModel: TrendingViewModel)
 
     fun inject(trendingFragment: TrendingFragment)
+
+    fun inject(favouriteFragment: FavouriteFragment)
 }

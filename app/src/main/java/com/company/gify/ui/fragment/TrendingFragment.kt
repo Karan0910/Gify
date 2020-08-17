@@ -1,14 +1,19 @@
 package com.company.gify.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+
+import androidx.recyclerview.widget.RecyclerView
+
 import com.company.gify.R
 import com.company.gify.databinding.FragmentTrendingBinding
+import com.company.gify.db.GifDatabase
 import com.company.gify.di.DaggerApiComponent
 import com.company.gify.ui.adapter.TrendingGifAdapter
 import com.company.gify.viewmodel.TrendingViewModel
@@ -37,6 +42,8 @@ class TrendingFragment : Fragment() {
     ): View? {
 
         trendingViewModel = ViewModelProvider(this).get(TrendingViewModel::class.java)
+
+
         val binding = FragmentTrendingBinding.inflate(
             inflater, container, false
         )
@@ -53,8 +60,22 @@ class TrendingFragment : Fragment() {
 
         binding.recyclerViewTrending.apply {
             layoutManager = GridLayoutManager(context, 2)
+            gifAdapter.viewModel = trendingViewModel
             adapter = gifAdapter
         }
+
+        binding.recyclerViewTrending.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1) && dy != 0) {
+                    Log.d("TAG", "onScrolled: ")
+                    trendingViewModel.fetchGifs()
+
+                }
+            }
+        })
+
+        var dataBaseInstance = GifDatabase.getDatabasenInstance(requireContext())
+        trendingViewModel?.setInstanceOfDb(dataBaseInstance)
 
         observeLiveData()
 
@@ -92,6 +113,17 @@ class TrendingFragment : Fragment() {
                 }
             }
         })
+
+
+        trendingViewModel.belowInProgressLD.observe(viewLifecycleOwner, Observer { isLoading ->
+            isLoading.let {
+                if (it) {
+                    progressbar.visibility = View.VISIBLE
+                } else {
+                    progressbar.visibility = View.GONE
+                }
+            }
+        })
     }
 
 
@@ -118,6 +150,7 @@ class TrendingFragment : Fragment() {
 
             override fun onQueryTextSubmit(query: String): Boolean {
                 trendingViewModel.fetchSearchedGifs(query);
+
                 return false
             }
 
