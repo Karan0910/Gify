@@ -15,25 +15,26 @@ import com.company.gify.R
 import com.company.gify.databinding.FragmentTrendingBinding
 import com.company.gify.db.GifDatabase
 import com.company.gify.di.DaggerApiComponent
-import com.company.gify.ui.adapter.TrendingGifAdapter
+import com.company.gify.ui.adapter.GifAdapter
+import com.company.gify.utils.EventObserver
+import com.company.gify.viewmodel.FavoriteEventsViewModel
 import com.company.gify.viewmodel.TrendingViewModel
 import kotlinx.android.synthetic.main.fragment_trending.*
-import javax.inject.Inject
 
 
 class TrendingFragment : Fragment() {
-
-    @Inject
-    lateinit var gifAdapter: TrendingGifAdapter
 
     private lateinit var trendingViewModel: TrendingViewModel
 
     private lateinit var searchView: SearchView
 
+    private lateinit var gifAdapter : GifAdapter
+
+    private lateinit var favoriteEventViewModel: FavoriteEventsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        favoriteEventViewModel = ViewModelProvider(requireActivity()).get(FavoriteEventsViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -51,22 +52,22 @@ class TrendingFragment : Fragment() {
 
         DaggerApiComponent.create().inject(this)
 
-        trendingViewModel.onRefresh()
+
 
         binding.mainSwipeRefreshLayout.setOnRefreshListener {
             binding.mainSwipeRefreshLayout.isRefreshing = false
             trendingViewModel.onRefresh()
         }
 
+        gifAdapter = GifAdapter(trendingViewModel)
         binding.recyclerViewTrending.apply {
             layoutManager = GridLayoutManager(context, 2)
-            gifAdapter.viewModel = trendingViewModel
             adapter = gifAdapter
         }
 
         binding.recyclerViewTrending.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (!recyclerView.canScrollVertically(1) && dy != 0) {
+                if (!recyclerView.canScrollVertically(1)) {
                     Log.d("TAG", "onScrolled: ")
                     trendingViewModel.fetchGifs()
 
@@ -76,6 +77,18 @@ class TrendingFragment : Fragment() {
 
         var dataBaseInstance = GifDatabase.getDatabasenInstance(requireContext())
         trendingViewModel?.setInstanceOfDb(dataBaseInstance)
+
+        trendingViewModel.onRefresh()
+
+        favoriteEventViewModel.gifUnfavoriteFromFavoriteEvent.observe(viewLifecycleOwner, EventObserver {
+            trendingViewModel.handleGifUnfavorited(it)
+        })
+        trendingViewModel.gifFavoriteEvent.observe(viewLifecycleOwner, EventObserver {
+            favoriteEventViewModel.handleGifFavorited(it)
+        })
+        trendingViewModel.gifUnfavoriteEvent.observe(viewLifecycleOwner, EventObserver {
+            favoriteEventViewModel.handleGifUnfavoriteFromTrending(it)
+        })
 
         observeLiveData()
 
@@ -149,7 +162,7 @@ class TrendingFragment : Fragment() {
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                trendingViewModel.fetchSearchedGifs(query);
+                trendingViewModel.handleSearchQuery(query)
 
                 return false
             }

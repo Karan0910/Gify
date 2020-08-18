@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
@@ -42,7 +43,10 @@ class MainActivity : AppCompatActivity() {
         searchView = menu?.findItem(R.id.searchView)?.actionView as SearchView
         onPageChange()
         return true
+
     }
+
+
 
     private fun onPageChange(){
         binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -62,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                }
 
                else if(position==1) {
-                   actionBar?.hide()
+
                    supportActionBar?.hide()
                    searchView.visibility= View.GONE
                }
@@ -70,5 +74,7 @@ class MainActivity : AppCompatActivity() {
 
        })
     }
+
+
 
 }

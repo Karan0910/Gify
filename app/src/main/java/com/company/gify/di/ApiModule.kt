@@ -2,11 +2,6 @@ package com.company.gify.di
 
 import com.company.gify.api.ApiService
 import com.company.gify.api.GifyApi
-import com.company.gify.db.GifDatabase
-import com.company.gify.model.Gif
-import com.company.gify.ui.adapter.FavGifAdapter
-import com.company.gify.ui.adapter.TrendingGifAdapter
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -35,16 +30,6 @@ class ApiModule {
     @Provides
     fun provideCompositeDisposable(): CompositeDisposable {
         return CompositeDisposable()
-    }
-
-    @Provides
-    fun provideGifAdapter(): TrendingGifAdapter {
-        return TrendingGifAdapter()
-    }
-
-    @Provides
-    fun provideFavGifAdapter(): FavGifAdapter {
-        return FavGifAdapter()
     }
 
 

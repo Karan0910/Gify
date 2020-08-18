@@ -3,24 +3,22 @@ package com.company.gify.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.sql.Blob
 
 
-@Entity(tableName = GifData.TABLE_NAME)
-data class GifData(
-    @PrimaryKey(autoGenerate = true)
+@Entity(tableName = Gif.TABLE_NAME)
+data class Gif(
+
+    @PrimaryKey
     @ColumnInfo(name = ID)
-    var id: Int=0,
-    @ColumnInfo(name = IMAGEID)
-    var imageId: String,
+    var id: String="",
     @ColumnInfo(name = IMAGEURL)
-    var imageURL: String)
-
+    var imageURL: String,
+    var isFavorite:Boolean = false
+)
 
 {   companion object {
     const val TABLE_NAME="gif_details"
     const val ID = "id"
-    const val IMAGEID= "image_id"
     const val IMAGEURL = "image_url"
     }
 }

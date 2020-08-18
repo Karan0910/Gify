@@ -1,15 +1,14 @@
 package com.company.gify.db
 
 import android.content.Context
-import androidx.fragment.app.Fragment
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.company.gify.db.dao.GifDataDao
-import com.company.gify.db.entities.GifData
+import com.company.gify.db.entities.Gif
 
 
-@Database(entities = [GifData::class], version = DB_VERSION, exportSchema = false)
+@Database(entities = [Gif::class], version = DB_VERSION, exportSchema = false)
 abstract class GifDatabase : RoomDatabase() {
     abstract fun gifDataDao(): GifDataDao
 

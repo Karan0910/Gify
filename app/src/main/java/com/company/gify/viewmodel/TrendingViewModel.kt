@@ -1,24 +1,27 @@
 package com.company.gify.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.company.gify.api.ApiService
 import com.company.gify.db.GifDatabase
-import com.company.gify.db.entities.GifData
+import com.company.gify.db.entities.Gif
 import com.company.gify.di.DaggerApiComponent
-import com.company.gify.model.Gif
-import io.reactivex.Scheduler
+import com.company.gify.model.GifsResult
+import com.company.gify.model.mapToGif
+import com.company.gify.ui.onItemClickListener
+import com.company.gify.utils.Event
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.internal.disposables.ArrayCompositeDisposable
+import io.reactivex.functions.BiConsumer
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class TrendingViewModel : ViewModel() {
+class TrendingViewModel : ViewModel(), onItemClickListener {
 
     @Inject
     lateinit var apiService: ApiService
@@ -27,23 +30,34 @@ class TrendingViewModel : ViewModel() {
     lateinit var compositeDisposable: CompositeDisposable
 
     //assuming this list will contain data
-    lateinit var favoriteList: ArrayList<Gif>
+    private var favoriteList = ArrayList<Gif>()
 
-    private lateinit var localGifList : ArrayList<Gif>
+    private var isFavoriteListFetched = false
 
-    var pageNumber =0
-    var itemCount=20
+    private lateinit var localGifList: ArrayList<Gif>
 
-    private var dataBaseInstance: GifDatabase ?= null
+    var pageNumber = 0
+    var itemCount = 20
+
+    private var searchQuery = ""
+
+    private var dataBaseInstance: GifDatabase? = null
+
+    private val _gifFavoriteEvent = MutableLiveData<Event<Gif>>()
+    val gifFavoriteEvent: LiveData<Event<Gif>>
+        get() = _gifFavoriteEvent
+
+    private val _gifUnfavoriteEvent = MutableLiveData<Event<Gif>>()
+    val gifUnfavoriteEvent: LiveData<Event<Gif>>
+        get() = _gifUnfavoriteEvent
+
 
     fun setInstanceOfDb(dataBaseInstance: GifDatabase) {
         this.dataBaseInstance = dataBaseInstance
     }
 
-
     init {
         DaggerApiComponent.create().inject(this)
-
     }
 
     private val gifList by lazy { MutableLiveData<List<Gif>>() }
@@ -67,35 +81,79 @@ class TrendingViewModel : ViewModel() {
         get() = isError
 
 
-    fun onRefresh(){
-        pageNumber=0
-        localGifList= ArrayList()
+    fun onRefresh() {
+
+        if (isFavoriteListFetched) {
+            refresh()
+        } else {
+            dataBaseInstance?.let { database: GifDatabase ->
+                compositeDisposable.add(database.gifDataDao().getAllRecords()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { favorites, throwable ->
+                        favoriteList = favorites as? ArrayList<Gif> ?: ArrayList()
+                        isFavoriteListFetched = throwable == null
+                        refresh()
+                    })
+            } ?: refresh()
+        }
+    }
+
+    private fun refresh() {
+        pageNumber = 0
+        searchQuery =  ""
+        localGifList = ArrayList()
+        fetchGifs()
+    }
+
+    fun handleSearchQuery(query: String?) {
+        inProgress.value = true
+        searchQuery = query ?: ""
+        pageNumber = 0
+        if(pageNumber==0)
+            localGifList= ArrayList()
         fetchGifs()
     }
 
     fun fetchGifs() {
+        if (pageNumber > 0)
+            belowInProgress.value = true
+        if (searchQuery.isEmpty()) {
 
-        if(pageNumber>0)
-            belowInProgress.value=true
+            fetchGifData(apiService.fetchTrendingGifs(
+                "g6OYYyLwvtQiDL78sg877bwLmGVQd6L9",
+                itemCount,
+                pageNumber * itemCount
+            ))
 
-        compositeDisposable.add(
-            apiService.fetchTrendingGifs("g6OYYyLwvtQiDL78sg877bwLmGVQd6L9",itemCount,(pageNumber*itemCount))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map { it.data }
-                .subscribeWith(createGifObserver())
-        )
 
+        } else {
+
+            fetchGifData(apiService.fetchSearchedGifs(
+                "g6OYYyLwvtQiDL78sg877bwLmGVQd6L9",
+                searchQuery,
+                itemCount,
+                pageNumber * itemCount
+            ))
+
+        }
         pageNumber++
     }
 
-    fun fetchSearchedGifs(query : String) {
-        compositeDisposable.add(
-            apiService.fetchSearchedGifs("g6OYYyLwvtQiDL78sg877bwLmGVQd6L9",query,itemCount,pageNumber*itemCount)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map { it.data }
-                .subscribeWith(createGifObserver())
+    private fun fetchGifData(single: Single<GifsResult>) {
+        compositeDisposable.add(single.subscribeOn(Schedulers.io())
+            .flatMap {
+                Observable.fromIterable(it.data)
+                    .map { mapToGif(it) }
+                    .toList()
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            //.subscribeWith(createGifObserver())
+            .subscribe({
+                onGifsFetched(it)
+            }, {
+                onError(it)
+            })
         )
     }
 
@@ -104,89 +162,118 @@ class TrendingViewModel : ViewModel() {
         compositeDisposable.clear()
     }
 
+    private fun onGifsFetched(gifs: List<Gif>){
+        isError.value = false
+        setFavoritesOnNetworkPage(gifs)
+        localGifList = addFetchedGifs(gifs as ArrayList)
+        inProgress.value = false
+        belowInProgress.value = false
+    }
+
+    private fun setFavoritesOnNetworkPage(networkGifs: List<Gif>) {
+        for (gif in networkGifs) {
+            for (favGif in favoriteList) {
+                if (favGif.id.equals(gif.id)) {
+                    gif.isFavorite=true
+                }
+            }
+        }
+    }
+
+    private fun onError(e: Throwable){
+        inProgress.value = false
+        isError.value = true
+        belowInProgress.value = false
+    }
+
     private fun createGifObserver(): DisposableSingleObserver<List<Gif>> {
         return object : DisposableSingleObserver<List<Gif>>() {
 
             override fun onSuccess(gifs: List<Gif>) {
-                inProgress.value = true
-                isError.value = false
-                gifList.value = addFav(gifs)
-                localGifList= addFetchedGifs(gifs as ArrayList)
-                inProgress.value = false
-                belowInProgress.value=false
+
             }
 
             override fun onError(e: Throwable) {
-                inProgress.value = true
-                isError.value = true
-                Log.e("onError()", "Error: ${e.message}")
-                inProgress.value = false
-                belowInProgress.value=false
-            }
-        }
-    }
-
-    fun addRemoveGif(gif: Gif){
-        for( newGif in localGifList){
-            if (newGif.id==gif.id){
-                newGif.favorite = !gif.favorite
-                if(newGif.favorite){
-                    //favoriteList.add(newGif)
-                    var gifData =GifData(imageId = newGif.id,imageURL = newGif.images.preview_gif.url)
-                    saveDataIntoDb(gifData)
-                } else {
-                    //favoriteList.remove(newGif)
-                }
 
             }
         }
-        gifList.value=localGifList
+    }
+
+    fun addFetchedGifs(addgifList: ArrayList<Gif>): ArrayList<Gif> {
+        val newLocalGifList = ArrayList(localGifList)
+        newLocalGifList.addAll(addgifList)
+        gifList.value = newLocalGifList
+        return newLocalGifList
     }
 
 
-    // add fav gifs in adapter
-    fun addFav(gifList : List<Gif>) : List<Gif> {
+    fun insertFavoriteGif(gif: Gif) {
+        val database = dataBaseInstance ?: return
+        gif.isFavorite = true;
+        database.gifDataDao().insertGifData(gif)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                _gifFavoriteEvent.value = Event(gif)
+                favoriteList.add(gif)
+                updateFavoriteFlag(gif,true)
+            }, {
 
-
-
-        // change fav list
-        favoriteList = gifList as ArrayList<Gif>
-
-        if(favoriteList.size==0) {
-        for (gif in gifList){
-
-                 for(favGif in favoriteList){
-
-                     if(favGif.id.equals(gif.id)){
-                         gif.favorite=true
-                     }
-                 }
-         }
-        }
-        return gifList
-    }
-
-    fun addFetchedGifs(addgifList : ArrayList<Gif>) : ArrayList<Gif> {
-
-        localGifList.addAll(addgifList)
-        gifList.value=localGifList
-        return localGifList
-    }
-
-
-    fun saveDataIntoDb(data: GifData){
-
-        dataBaseInstance?.gifDataDao()?.insertGifData(data)
-            ?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe ({
-            },{
-
-            })?.let {
+            }).let {
                 compositeDisposable.add(it)
             }
     }
 
+    fun removeFavoriteGif(gif: Gif) {
+        val database = dataBaseInstance ?: return
+        gif.isFavorite = false
+        database.gifDataDao().removeGifData(gif)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
+                _gifUnfavoriteEvent.value = Event(gif)
 
+                // TODO: 18/08/20 Ask about handling reference
+                for (gifList in favoriteList){
+                    if (gifList.id.equals(gif.id)){
+                        favoriteList.remove(gifList)
+                    }
+                }
+                updateFavoriteFlag(gif,false)
+            },{
+            }).let {
+                compositeDisposable.add(it)
+            }
+    }
 
+    private fun updateFavoriteFlag(gif: Gif,isFavorite: Boolean) {
+        val newGifList = gifListLD.value?.toMutableList() ?: return
+        //if(newGifList.indexOf(gif)!=-1) {
+
+        //}
+        var updatedGif : Gif? = null
+        for (gifList in newGifList){
+            if (gifList.id.equals(gif.id)){
+                updatedGif = newGifList.get(newGifList.indexOf(gifList))
+            }
+        }
+
+        if (updatedGif != null) {
+            updatedGif.isFavorite = isFavorite
+        }
+        gifList.value = newGifList
+    }
+
+    override fun onItemClick(gif: Gif) {
+        if (gif.isFavorite) {
+            removeFavoriteGif(gif)
+
+        } else {
+            insertFavoriteGif(gif)
+        }
+    }
+
+    fun handleGifUnfavorited(gif: Gif) {
+        removeFavoriteGif(gif)
+    }
 }
