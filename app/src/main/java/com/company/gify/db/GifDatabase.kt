@@ -34,4 +34,4 @@ abstract class GifDatabase : RoomDatabase() {
 
 const val DB_VERSION = 1
 
-const val DB_NAME = "GidDataDatabase.db"
+const val DB_NAME = "GifDatabase.db"

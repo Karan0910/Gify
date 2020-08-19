@@ -10,13 +10,11 @@ import com.company.gify.R
 import com.company.gify.databinding.ItemGifBinding
 import com.company.gify.db.entities.Gif
 import com.company.gify.ui.onItemClickListener
-import com.company.gify.viewmodel.TrendingViewModel
 
-class GifAdapter(private val onItemClickListener: onItemClickListener) : RecyclerView.Adapter<GifAdapter.GifViewHolder>() {
-
+class GifAdapter(private val onItemClickListener: onItemClickListener) :
+    RecyclerView.Adapter<GifAdapter.GifViewHolder>() {
 
     private val gifList = ArrayList<Gif>()
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifViewHolder {
         val itemGifBinding: ItemGifBinding = DataBindingUtil.inflate(
@@ -25,28 +23,38 @@ class GifAdapter(private val onItemClickListener: onItemClickListener) : Recycle
             parent,
             false
         )
-
         return GifViewHolder(itemGifBinding)
     }
 
     override fun onBindViewHolder(holder: GifAdapter.GifViewHolder, position: Int) {
-        val gif= gifList.get(position)
+        val gif = gifList.get(position)
         holder.itemGifBinding.gif = gif
         Glide.with(holder.itemGifBinding.imageViewGif.context)
             .asGif()
             .load(gifList.get(position).imageURL)
             .into(holder.itemGifBinding.imageViewGif)
 
+        if (gif.isFavorite)
+            holder.itemGifBinding.favImg.progress = 1F
+        else {
+            holder.itemGifBinding.favImg.progress = 0F
+        }
 
         holder.itemGifBinding.favImg.setOnClickListener(View.OnClickListener {
-            onItemClickListener.onItemClick(gif)
+            if (gif.isFavorite) {
+                holder.itemGifBinding.favImg.progress = 0F
+                onItemClickListener.onItemClick(gif)
+            } else {
+                holder.itemGifBinding.favImg.progress = 1F
+                onItemClickListener.onItemClick(gif)
+
+            }
         })
         holder.itemGifBinding.executePendingBindings()
     }
 
     inner class GifViewHolder(val itemGifBinding: ItemGifBinding) :
         RecyclerView.ViewHolder(itemGifBinding.root)
-
 
     fun setUpGifs(listOfGifs: List<Gif>) {
         gifList.clear()

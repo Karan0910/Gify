@@ -4,21 +4,20 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-
 @Entity(tableName = Gif.TABLE_NAME)
 data class Gif(
 
     @PrimaryKey
     @ColumnInfo(name = ID)
-    var id: String="",
+    var id: String = ""
+) {
     @ColumnInfo(name = IMAGEURL)
-    var imageURL: String,
-    var isFavorite:Boolean = false
-)
+    var imageURL = ""
+    var isFavorite = false
 
-{   companion object {
-    const val TABLE_NAME="gif_details"
-    const val ID = "id"
-    const val IMAGEURL = "image_url"
+    companion object {
+        const val TABLE_NAME = "gif_details"
+        const val ID = "id"
+        const val IMAGEURL = "image_url"
     }
 }

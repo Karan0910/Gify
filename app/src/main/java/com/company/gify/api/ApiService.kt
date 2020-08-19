@@ -11,18 +11,23 @@ class ApiService {
     lateinit var gifyapi: GifyApi
 
     companion object {
-        val BASE_URL = "https://api.giphy.com/v1/gifs/"
+        const val BASE_URL = "https://api.giphy.com/v1/gifs/"
     }
 
     init {
         DaggerApiComponent.create().inject(this)
     }
 
-    fun fetchTrendingGifs(api_key: String,limit : Int, offset: Int): Single<GifsResult> {
+    fun fetchTrendingGifs(api_key: String, limit: Int, offset: Int): Single<GifsResult> {
         return gifyapi.getTrendingGif(api_key, limit, offset)
     }
 
-    fun fetchSearchedGifs(api_key: String, query: String ,limit : Int, offset: Int): Single<GifsResult> {
-        return gifyapi.getSearchedGif(api_key,query, limit, offset)
+    fun fetchSearchedGifs(
+        api_key: String,
+        query: String,
+        limit: Int,
+        offset: Int
+    ): Single<GifsResult> {
+        return gifyapi.getSearchedGif(api_key, query, limit, offset)
     }
 }

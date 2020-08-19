@@ -1,4 +1,4 @@
-package com.company.gify.viewmodel
+package com.company.gify.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,7 +18,7 @@ class FavoriteEventsViewModel : ViewModel() {
 
     private val _gifUnfavoriteFromFavoriteEvent = MutableLiveData<Event<Gif>>()
     val gifUnfavoriteFromFavoriteEvent: LiveData<Event<Gif>>
-    get() =  _gifUnfavoriteFromFavoriteEvent
+        get() = _gifUnfavoriteFromFavoriteEvent
 
     fun handleGifFavorited(gif: Gif) {
         _gifFavoriteEvent.value = Event(gif)

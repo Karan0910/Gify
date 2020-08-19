@@ -9,12 +9,13 @@ import com.company.gify.ui.fragment.FavouriteFragment
 import com.company.gify.ui.fragment.TrendingFragment
 
 class ViewPagerAdapter(private val context: Context, fragmentManager: FragmentManager) :
-    FragmentStatePagerAdapter(fragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val TAB_TITLES = arrayOf(
         R.string.tab_trending,
         R.string.tab_fav
     )
+
     override fun getItem(position: Int): Fragment {
         when (position) {
             0 -> return TrendingFragment()

@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.company.gify"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -42,7 +42,7 @@ def lifeCycleExtensionsVersion = '1.1.1'
 def androidxVersion = '1.1.0'
 def retrofitVersion = '2.7.1'
 def daggerVersion = '2.13'
-def firstStableVersion = '1.0.0'
+def lottieVersion = '3.4.1'
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -86,9 +86,10 @@ dependencies {
     implementation "androidx.room:room-rxjava2:2.2.5"
     kapt "androidx.room:room-compiler:2.2.5"
 
-    implementation "com.github.varunest:sparkbutton:1.0.6"
 
-    implementation 'com.jackandphantom.android:androidlikebutton:1.2.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
 
 }

@@ -9,11 +9,11 @@ import io.reactivex.Single
 interface GifDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertGifData(data:Gif) : Completable
+    fun insertGifData(data: Gif): Completable
 
     @Query("SELECT * FROM ${Gif.TABLE_NAME}")
-    fun getAllRecords():Single<List<Gif>>
+    fun getAllRecords(): Single<List<Gif>>
 
     @Delete
-    fun removeGifData(gif:Gif) : Completable
+    fun removeGifData(gif: Gif): Completable
 }

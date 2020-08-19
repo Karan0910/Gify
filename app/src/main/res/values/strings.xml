@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">Gify</string>
-
-
-    <!--Tab names-->
     <string name="tab_trending">Trending</string>
     <string name="tab_fav">Favourites</string>
     <string name="no_favotire_gifs_error">No Favotire Gifs Found!</string>
-    <!-- TODO: Remove or change this placeholder text -->
-
+    <string name="no_gifs_found">No Gifs Found!</string>
+    <string name="gif_image">gif_image</string>
 
 </resources>

@@ -6,10 +6,10 @@ data class GifResponse(
     val id: String,
     val images: Images,
     val import_datetime: String
-
-
 )
 
-fun mapToGif(gifResponse: GifResponse) : Gif {
-    return Gif(gifResponse.id,gifResponse.images.preview_gif.url)
+fun mapToGif(gifResponse: GifResponse): Gif {
+    val gif = Gif(gifResponse.id)
+    gif.imageURL = gifResponse.images.preview_gif.url
+    return gif
 }

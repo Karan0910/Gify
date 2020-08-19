@@ -32,5 +32,4 @@ class ApiModule {
         return CompositeDisposable()
     }
 
-
 }

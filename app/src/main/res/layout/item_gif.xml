@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="gif"
             type="com.company.gify.db.entities.Gif" />
@@ -29,18 +30,18 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:clickable="true"
+                android:contentDescription="@string/gif_image"
                 android:focusable="true"
                 android:scaleType="fitCenter" />
 
-            <ImageButton
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/fav_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="end"
-                android:background="@null"
-                android:src="@{gif.favorite ? @drawable/ic_fav_filled : @drawable/ic_fav_empty}"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/default_margin"
+                app:lottie_fileName="heart_anim.json" />
 
         </LinearLayout>
 
