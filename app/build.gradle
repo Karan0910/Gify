@@ -16,6 +16,7 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField "String", "GIFY_API_KEY", "${GIFY_API_KEY}"
     }
 
     compileOptions {
@@ -29,8 +30,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-
 
     buildFeatures {
         viewBinding = true
@@ -57,6 +56,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.0'
     kapt 'com.android.databinding:compiler:3.1.4'
+
+    // test dependencies
+    testImplementation "org.mockito:mockito-core:2.+"
+    testImplementation 'android.arch.core:core-testing:1.1.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     // Android Lifecycle Extensions
     implementation "android.arch.lifecycle:extensions:$lifeCycleExtensionsVersion"

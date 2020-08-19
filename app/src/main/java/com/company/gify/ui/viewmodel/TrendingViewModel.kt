@@ -3,6 +3,7 @@ package com.company.gify.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.company.gify.BuildConfig
 import com.company.gify.api.ApiService
 import com.company.gify.db.GifDatabase
 import com.company.gify.db.entities.Gif
@@ -112,7 +113,7 @@ class TrendingViewModel : ViewModel(), onItemClickListener {
 
             fetchGifData(
                 apiService.fetchTrendingGifs(
-                    "g6OYYyLwvtQiDL78sg877bwLmGVQd6L9",
+                    BuildConfig.GIFY_API_KEY,
                     itemCount,
                     pageNumber * itemCount
                 )
@@ -122,7 +123,7 @@ class TrendingViewModel : ViewModel(), onItemClickListener {
 
             fetchGifData(
                 apiService.fetchSearchedGifs(
-                    "g6OYYyLwvtQiDL78sg877bwLmGVQd6L9",
+                    BuildConfig.GIFY_API_KEY,
                     searchQuery,
                     itemCount,
                     pageNumber * itemCount

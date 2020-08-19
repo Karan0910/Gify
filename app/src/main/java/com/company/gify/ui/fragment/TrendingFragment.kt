@@ -73,7 +73,6 @@ class TrendingFragment : Fragment() {
         binding.recyclerViewTrending.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = gifAdapter
-            itemAnimator
         }
 
         binding.recyclerViewTrending.addOnScrollListener(object : RecyclerView.OnScrollListener() {

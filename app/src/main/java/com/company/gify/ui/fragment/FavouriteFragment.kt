@@ -12,9 +12,9 @@ import com.company.gify.databinding.FragmentFavouriteBinding
 import com.company.gify.db.GifDatabase
 import com.company.gify.di.DaggerApiComponent
 import com.company.gify.ui.adapter.GifAdapter
-import com.company.gify.utils.EventObserver
 import com.company.gify.ui.viewmodel.FavoriteEventsViewModel
 import com.company.gify.ui.viewmodel.FavouriteViewModel
+import com.company.gify.utils.EventObserver
 import kotlinx.android.synthetic.main.fragment_favourite.*
 
 
