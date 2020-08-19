@@ -48,6 +48,10 @@ class TrendingViewModel : ViewModel(), onItemClickListener {
     val gifUnfavoriteEvent: LiveData<Event<Gif>>
         get() = _gifUnfavoriteEvent
 
+    private val _closeSearchEvent = MutableLiveData<Event<Any>>()
+    val closeSearchEvent: LiveData<Event<Any>>
+        get() = _closeSearchEvent
+
     fun setInstanceOfDb(dataBaseInstance: GifDatabase) {
         this.dataBaseInstance = dataBaseInstance
     }
@@ -93,6 +97,7 @@ class TrendingViewModel : ViewModel(), onItemClickListener {
     private fun refresh() {
         pageNumber = 0
         searchQuery = ""
+        _closeSearchEvent.value=Event(Any())
         localGifList = ArrayList()
         fetchGifs()
     }

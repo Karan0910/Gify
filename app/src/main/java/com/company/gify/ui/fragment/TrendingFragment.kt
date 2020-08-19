@@ -1,6 +1,7 @@
 package com.company.gify.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -142,6 +143,10 @@ class TrendingFragment : Fragment() {
         trendingViewModel.gifUnfavoriteEvent.observe(viewLifecycleOwner, EventObserver {
             favoriteEventViewModel.handleGifUnfavoriteFromTrending(it)
         })
+
+        trendingViewModel.closeSearchEvent.observe(viewLifecycleOwner, EventObserver {
+            searchView.setQuery("",false)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -152,6 +157,14 @@ class TrendingFragment : Fragment() {
     }
 
     private fun configureSearch(searchView: SearchView) {
+
+        searchView.setOnCloseListener(object : SearchView.OnCloseListener {
+            override fun onClose(): Boolean {
+                Log.d("TAG", "onClose: ")
+                return false
+            }
+        })
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
