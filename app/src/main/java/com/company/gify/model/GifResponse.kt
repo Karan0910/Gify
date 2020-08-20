@@ -10,6 +10,6 @@ data class GifResponse(
 
 fun mapToGif(gifResponse: GifResponse): Gif {
     val gif = Gif(gifResponse.id)
-    gif.imageURL = gifResponse.images.preview_gif.url
+    gif.imageURL = gifResponse.images.preview_gif?.url ?: ""
     return gif
 }

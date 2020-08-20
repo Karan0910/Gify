@@ -32,6 +32,7 @@ class GifAdapter(private val onItemClickListener: onItemClickListener) :
         Glide.with(holder.itemGifBinding.imageViewGif.context)
             .asGif()
             .load(gifList.get(position).imageURL)
+            .placeholder(R.drawable.ic_placeholder)
             .into(holder.itemGifBinding.imageViewGif)
 
         if (gif.isFavorite)
