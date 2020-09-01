@@ -21,10 +21,9 @@ class FavouriteViewModel : ViewModel(), onItemClickListener {
     val gifUnfavoriteEvent: LiveData<Event<Gif>>
         get() = _gifUnfavoriteEvent
 
-    private val gifList by lazy { MutableLiveData<List<Gif>>() }
 
-    val gifListLD: LiveData<List<Gif>>
-        get() = gifList
+
+    lateinit var gifListLD: LiveData<List<Gif>>
 
     private val isError by lazy { MutableLiveData<Boolean>() }
     val isErrorLD: LiveData<Boolean>
@@ -32,11 +31,12 @@ class FavouriteViewModel : ViewModel(), onItemClickListener {
 
     fun setInstanceOfDb(dataBaseInstance: GifDatabase) {
         this.dataBaseInstance = dataBaseInstance
+        gifListLD=dataBaseInstance.gifDataDao().getLiveRecords()
     }
 
-    fun getGifData() {
+    /*fun getGifData() {
         val database = dataBaseInstance ?: return
-        database.gifDataDao().getAllRecords()
+        database.gifDataDao().getLiveRecords()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -51,27 +51,27 @@ class FavouriteViewModel : ViewModel(), onItemClickListener {
             }).let {
                 compositeDisposable.add(it)
             }
-    }
+    }*/
 
     override fun onItemClick(gif: Gif) {
         _gifUnfavoriteEvent.value = Event(gif)
     }
 
-    fun handleGifFavorited(gif: Gif) {
+    /*fun handleGifFavorited(gif: Gif) {
         val newFavGifList = gifListLD.value?.toMutableList() ?: ArrayList()
         newFavGifList.add(gif)
         if (newFavGifList.size > 0)
             isError.postValue(false)
-        gifList.value = newFavGifList
-    }
+        //gifList.value = newFavGifList
+    }*/
 
-    fun handleGifUnfavorited(gif: Gif) {
+   /* fun handleGifUnfavorited(gif: Gif) {
         val newFavGifList = gifListLD.value?.toMutableList() ?: return
         newFavGifList.remove(gif)
         if (newFavGifList.size == 0)
             isError.postValue(true)
         gifList.value = newFavGifList
-    }
+    }*/
 
     override fun onCleared() {
         compositeDisposable.dispose()

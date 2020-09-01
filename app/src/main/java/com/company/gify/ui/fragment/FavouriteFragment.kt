@@ -63,7 +63,7 @@ class FavouriteFragment : Fragment() {
         val dataBaseInstance = GifDatabase.getDatabasenInstance(requireContext())
         favouriteViewModel.setInstanceOfDb(dataBaseInstance)
 
-        favouriteViewModel.getGifData()
+        //favouriteViewModel.getGifData()
 
     }
 
@@ -83,14 +83,14 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun observerAddRemoveEvents() {
-        favoriteEventsViewModel.gifFavoriteEvent.observe(viewLifecycleOwner, EventObserver {
+       /* favoriteEventsViewModel.gifFavoriteEvent.observe(viewLifecycleOwner, EventObserver {
             favouriteViewModel.handleGifFavorited(it)
-        })
-        favoriteEventsViewModel.gifUnfavoriteFromTrendingEvent.observe(
+        })*/
+      /*  favoriteEventsViewModel.gifUnfavoriteFromTrendingEvent.observe(
             viewLifecycleOwner,
             EventObserver {
                 favouriteViewModel.handleGifUnfavorited(it)
-            })
+            })*/
         favouriteViewModel.gifUnfavoriteEvent.observe(viewLifecycleOwner, EventObserver {
             favoriteEventsViewModel.handleGifUnfavoritedFromFavorite(it)
         })

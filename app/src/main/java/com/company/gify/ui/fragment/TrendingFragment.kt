@@ -180,4 +180,8 @@ class TrendingFragment : Fragment() {
         })
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
 }
