@@ -7,9 +7,7 @@ import com.company.gify.db.GifDatabase
 import com.company.gify.db.entities.Gif
 import com.company.gify.ui.onItemClickListener
 import com.company.gify.utils.Event
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class FavouriteViewModel : ViewModel(), onItemClickListener {
 
