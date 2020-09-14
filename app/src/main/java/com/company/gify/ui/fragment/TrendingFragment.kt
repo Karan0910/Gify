@@ -61,7 +61,7 @@ class TrendingFragment : Fragment() {
         val dataBaseInstance = GifDatabase.getDatabasenInstance(requireContext())
         trendingViewModel.setInstanceOfDb(dataBaseInstance)
 
-        trendingViewModel.onRefresh()
+        trendingViewModel.fetchGifs()
     }
 
     private fun initViews(binding: FragmentTrendingBinding) {
@@ -76,20 +76,20 @@ class TrendingFragment : Fragment() {
             adapter = gifAdapter
         }
 
-        binding.recyclerViewTrending.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        /*binding.recyclerViewTrending.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (!recyclerView.canScrollVertically(1)) {
                     trendingViewModel.fetchGifs()
                 }
             }
-        })
+        })*/
     }
 
     private fun observeLiveData() {
         observeInProgress()
         observeIsError()
         observeGifList()
-        observerAddRemoveEvents()
+        //observerAddRemoveEvents()
     }
 
     private fun observeInProgress() {
@@ -132,17 +132,17 @@ class TrendingFragment : Fragment() {
     }
 
     private fun observerAddRemoveEvents() {
-        favoriteEventViewModel.gifUnfavoriteFromFavoriteEvent.observe(
+        /*favoriteEventViewModel.gifUnfavoriteFromFavoriteEvent.observe(
             viewLifecycleOwner,
             EventObserver {
                 trendingViewModel.handleGifUnfavorited(it)
-            })
-        trendingViewModel.gifFavoriteEvent.observe(viewLifecycleOwner, EventObserver {
+            })*/
+        /*trendingViewModel.gifFavoriteEvent.observe(viewLifecycleOwner, EventObserver {
             favoriteEventViewModel.handleGifFavorited(it)
-        })
-        trendingViewModel.gifUnfavoriteEvent.observe(viewLifecycleOwner, EventObserver {
+        })*/
+        /*trendingViewModel.gifUnfavoriteEvent.observe(viewLifecycleOwner, EventObserver {
             favoriteEventViewModel.handleGifUnfavoriteFromTrending(it)
-        })
+        })*/
 
         trendingViewModel.closeSearchEvent.observe(viewLifecycleOwner, EventObserver {
             searchView.setQuery("",false)

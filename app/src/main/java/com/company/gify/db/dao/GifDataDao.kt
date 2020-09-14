@@ -10,7 +10,10 @@ import io.reactivex.Single
 interface GifDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertGifData(data: Gif): Completable
+    fun insertGifData(data: Gif)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertGifList(gifList: List<Gif>)
 
     @Query("SELECT * FROM ${Gif.TABLE_NAME}")
     fun getAllRecords(): Single<List<Gif>>
@@ -18,6 +21,12 @@ interface GifDataDao {
     @Query(value = "SELECT * FROM ${Gif.TABLE_NAME}")
     fun getLiveRecords() : LiveData<List<Gif>>
 
+    @Query(value = "SELECT * FROM ${Gif.TABLE_NAME} WHERE ${Gif.ISFAVORITE} = 1")
+    fun getFavGifs() : LiveData<List<Gif>>
+
     @Delete
-    fun removeGifData(gif: Gif): Completable
+    fun removeGifData(gif: Gif)
+
+    @Query("DELETE FROM ${Gif.TABLE_NAME}")
+    fun removeAllData() : Completable
 }

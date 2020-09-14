@@ -13,11 +13,14 @@ data class Gif(
 ) {
     @ColumnInfo(name = IMAGEURL)
     var imageURL = ""
+
+    @ColumnInfo(name = ISFAVORITE)
     var isFavorite = false
 
     companion object {
         const val TABLE_NAME = "gif_details"
         const val ID = "id"
         const val IMAGEURL = "image_url"
+        const val ISFAVORITE = "is_fav"
     }
 }

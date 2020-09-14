@@ -29,7 +29,7 @@ class FavouriteViewModel : ViewModel(), onItemClickListener {
 
     fun setInstanceOfDb(dataBaseInstance: GifDatabase) {
         this.dataBaseInstance = dataBaseInstance
-        gifListLD=dataBaseInstance.gifDataDao().getLiveRecords()
+        gifListLD=dataBaseInstance.gifDataDao().getFavGifs()
     }
 
     /*fun getGifData() {
